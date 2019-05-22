@@ -1,6 +1,8 @@
 from datetime import datetime
 from project import factories, db
-
+from project.models.trades import Currency, Rate
+from sqlalchemy import orm
+Session = orm.scoped_session(orm.sessionmaker())
 
 def make_test_user():
     user = factories.UserFactory(
@@ -14,11 +16,11 @@ def make_test_user():
 
 def make_default_currency():
     currencies = (
-        factories.CurrencyFactory(name='BTC'),
-        factories.CurrencyFactory(name='ETH'),
-        factories.CurrencyFactory(name='XRP'),
-        factories.CurrencyFactory(name='XCH'),
-        factories.CurrencyFactory(name='EUS'),
+        factories.CurrencyFactory.build(name='BTC'),
+        factories.CurrencyFactory.build(name='ETH'),
+        factories.CurrencyFactory.build(name='XRP'),
+        factories.CurrencyFactory.build(name='XCH'),
+        factories.CurrencyFactory.build(name='EUS'),
     )
     db.session.bulk_save_objects(currencies)
     db.session.commit()
@@ -27,9 +29,8 @@ def make_default_currency():
 def make_test_rates():
     d_19_5_17 = datetime.fromtimestamp(1558051200)
     d_19_5_5 = datetime.fromtimestamp(1557051200)
-    rates = (
-        factories.RateFactory(currency__name='BTC', date=d_19_5_17, rate=0.3788, volume=6611.3),
-        factories.RateFactory(currency__name='EUS', date=d_19_5_5, rate=0.4022, volume=16611.7),
-    )
-    db.session.bulk_save_objects(rates)
-    db.session.commit()
+    btc = Currency.query.filter(Currency.name == 'BTC').first()
+    eus = Currency.query.filter(Currency.name == 'EUS').first()
+
+    factories.RateFactory(currency=btc, date=d_19_5_17, rate=0.3788, volume=6611.3)
+    factories.RateFactory(currency=eus, date=d_19_5_5, rate=0.4022, volume=16611.7)

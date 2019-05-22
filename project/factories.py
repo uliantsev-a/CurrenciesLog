@@ -23,4 +23,4 @@ class RateFactory(factory.Factory):
     class Meta:
         model = Rate
 
-    currency = factory.SubFactory(CurrencyFactory)
+    currency_id = factory.SelfAttribute('currency.id')
