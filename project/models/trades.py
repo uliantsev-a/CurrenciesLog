@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from project import db
 from sqlalchemy.sql import func
 from sqlalchemy.schema import UniqueConstraint
@@ -7,6 +8,14 @@ class Currency(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
     rates = db.relationship('Rate', backref='currency', lazy=True)
+
+    def average_from_period(self, days=10):
+        today = datetime.now().date()
+        delta = today - timedelta(days=days)
+        rates = (Rate.query.with_entities(func.avg(Rate.volume).label('average')).
+                 filter(Currency.id == self.id, Rate.date >= delta).one())
+
+        return rates[0]
 
 
 class Rate(db.Model):

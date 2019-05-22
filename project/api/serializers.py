@@ -1,7 +1,7 @@
 from marshmallow import fields, Schema
 
 from project import ma
-from project.models.trades import Currency
+from project.models.trades import Currency, Rate
 
 
 class PagedListSchema(Schema):
@@ -20,3 +20,16 @@ class CurrencySchema(ma.ModelSchema):
     class Meta:
         model = Currency
         fields = ('name',)
+
+
+class CurrencyListSchema(PagedListSchema):
+    items = fields.Nested(CurrencySchema, many=True, dump_only=True)
+
+
+class RateSchema(ma.ModelSchema):
+    average = fields.Function(lambda obj: obj.currency.average_from_period())
+    last_rate = fields.Float(attribute="rate")
+
+    class Meta:
+        model = Rate
+        fields = ('date', 'last_rate', 'average')
