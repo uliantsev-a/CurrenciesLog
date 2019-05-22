@@ -1,8 +1,9 @@
 from datetime import datetime
 from project import factories, db
-from project.models.trades import Currency, Rate
+from project.models.trades import Currency
 from sqlalchemy import orm
 Session = orm.scoped_session(orm.sessionmaker())
+
 
 def make_test_user():
     user = factories.UserFactory(

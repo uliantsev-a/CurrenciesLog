@@ -11,7 +11,7 @@ class TestUserModel(BaseTestCase):
         user = User(username='test_name', password=test_pass, firstname='f_name')
         self.assertIn('pbkdf2:sha256', user.password)
         self.assertTrue(user.check_password(test_pass))
-        self.assertFalse(user.check_password(test_pass+'asd'))
+        self.assertFalse(user.check_password(test_pass + 'asd'))
         self.assertFalse(user.check_password(''))
 
 
