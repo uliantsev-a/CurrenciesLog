@@ -1,0 +1,11 @@
+__pycache__
+.idea
+.git
+.coverage
+.coveragerc
+*.egg-info
+*.sqlite3
+logs
+instance
+venv
+htmlcov
