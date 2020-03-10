@@ -26,5 +26,9 @@ def test_user():
         app.logger.error("test user already exists, try enter with test:test")
 
 
-if __name__ == '__main__':
+def main():
     app.run()
+
+
+if __name__ == '__main__':
+    main()

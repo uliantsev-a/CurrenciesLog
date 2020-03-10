@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import asyncio
 import aiohttp
 from aiohttp import ClientSession
+from typing import List
 
 from sqlalchemy import exc
 from logging.handlers import RotatingFileHandler
@@ -43,9 +44,8 @@ async def request_api(url: str, session: ClientSession, **kwargs) -> list:
     return data
 
 
-async def get_hist(url: str, session: ClientSession, **kwargs) -> set:
+async def get_hist(url: str, session: ClientSession, **kwargs) -> List:
     """Getting history from API with possible processing."""
-    resp = set()
     try:
         today = datetime.now().replace(hour=0, second=0, microsecond=0)
         start_ms = int((today - timedelta(days=LOAD_PERIOD_BY_DAYS)).timestamp() * MS_TO_MICROSEC)
@@ -64,13 +64,13 @@ async def get_hist(url: str, session: ClientSession, **kwargs) -> set:
         return resp
     except Exception as e:
         app.logger.exception("Non-aiohttp exception occured:  %s", getattr(e, "__dict__", {}))
-        return resp
+        return []
     else:
         # Possible post processing  and return response data
-        return resp
+        return []
 
 
-async def load_one_to_usd(currency: object, session=ClientSession) -> None:
+async def load_one_to_usd(currency: Currency, session=ClientSession) -> None:
     """Load with saving rates by USD to a currency unit."""
 
     url = URL_HIST_TO_USD.format(time_frame=TIME_FRAME, currencies=currency.name)
@@ -81,7 +81,7 @@ async def load_one_to_usd(currency: object, session=ClientSession) -> None:
     saving_response_rates(currency, res)
 
 
-def saving_response_rates(currency: object, rates: list) -> None:
+def saving_response_rates(currency: Currency, rates: list) -> None:
     """Saving response data to DB."""
 
     bulk_rates = list()

@@ -22,7 +22,8 @@ class TestLoaderRates(BaseTestCase):
         date_first_rate = datetime.fromtimestamp(self.data_rates[0][0] / MS_TO_MICROSEC).date()
 
         # Tests before saving
-        first_rate_exists = self.db.session.query(exists().where(Rate.date == date_first_rate)).scalar()
+        first_rate_exists = self.db.session.query(exists().where(
+            Rate.date == date_first_rate)).scalar()
         self.assertFalse(first_rate_exists)
 
         query_rates = Rate.query.join(Rate.currency).filter(Currency.name == curr.name)
@@ -31,7 +32,8 @@ class TestLoaderRates(BaseTestCase):
         saving_response_rates(curr, self.data_rates)
 
         # Tests after saving
-        first_rate_exists = self.db.session.query(exists().where(Rate.date == date_first_rate)).scalar()
+        first_rate_exists = self.db.session.query(exists().where(
+            Rate.date == date_first_rate)).scalar()
         self.assertTrue(first_rate_exists)
 
         query_rates = Rate.query.join(Rate.currency).filter(Currency.name == curr.name)

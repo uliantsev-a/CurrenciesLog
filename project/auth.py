@@ -19,6 +19,7 @@ def auth_required(f):
             if user and check_password_hash(user.password, auth.password):
                 return f(*args, **kwargs)
 
-        return make_response('Could not verify your login!', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+        return make_response('Could not verify your login!', 401,
+                             {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
     return decorated
