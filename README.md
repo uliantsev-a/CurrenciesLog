@@ -23,18 +23,6 @@ export DATABASE_NAME='' DATABASE_USER='' DATABASE_HOST='' DATABASE_PASSWORD=''
 ```  
 for connect to your DB. Uses PostgreSQL by default.
 
-
-##### DB migrate:
-```sh
-flask db init
-flask db upgrade
-```
-if you will change models need use migrate with next upgrade
-```sh
-flask db migrate
-flask db upgrade
-```
-
 ##### Loading first data from fixtures:
 If you want add anything currency you should fill fixtures in `make_default_currency` inside `project/fixtures.py`.   
 Currency should be available on _bitfinex.com_.

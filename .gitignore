@@ -9,3 +9,4 @@ logs
 instance
 venv
 htmlcov
+project/.env
